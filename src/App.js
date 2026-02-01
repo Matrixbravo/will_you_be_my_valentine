@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Confetti from "react-confetti";
 import "./App.css";
 import song from "./song.mp3";
@@ -19,16 +19,55 @@ function App() {
   const [yesScale, setYesScale] = useState(1);
   const [accepted, setAccepted] = useState(false);
   const [shake, setShake] = useState(false);
-  const [position, setPosition] = useState({ top: "70%", left: "50%" });
+
+  const yesRef = useRef(null);
+  const containerRef = useRef(null);
+
+  // Track if NO button has started moving freely
+  const [noAbsolute, setNoAbsolute] = useState(false);
+  const [position, setPosition] = useState({ top: "0%", left: "0%" });
 
   const handleNoClick = () => {
     setNoCount((c) => c + 1);
-    setYesScale((s) => s + 0.25);
+    setYesScale((s) => s + 0.1);
 
-    setPosition({
-      top: Math.random() * 80 + "%",
-      left: Math.random() * 80 + "%",
-    });
+    // On first click, convert NO to absolute position for random movement
+    if (!noAbsolute && yesRef.current && containerRef.current) {
+      const yesRect = yesRef.current.getBoundingClientRect();
+      const containerRect = containerRef.current.getBoundingClientRect();
+
+      setPosition({
+        top: `${((yesRect.top + yesRect.height / 2 - containerRect.top) / containerRect.height) * 100}%`,
+        left: `${((yesRect.right + 10 - containerRect.left) / containerRect.width) * 100}%`,
+      });
+
+      setNoAbsolute(true);
+    } else if (noAbsolute && yesRef.current && containerRef.current) {
+      const yesRect = yesRef.current.getBoundingClientRect();
+      const containerRect = containerRef.current.getBoundingClientRect();
+
+      let left, top;
+      const buttonWidth = 140;
+      const buttonHeight = 50;
+      let attempts = 0;
+
+      do {
+        left = Math.random() * (containerRect.width - buttonWidth);
+        top = Math.random() * (containerRect.height - buttonHeight);
+        attempts++;
+        if (attempts > 100) break;
+      } while (
+        left + buttonWidth > yesRect.left &&
+        left < yesRect.right &&
+        top + buttonHeight > yesRect.top &&
+        top < yesRect.bottom
+      );
+
+      setPosition({
+        top: `${(top / containerRect.height) * 100}%`,
+        left: `${(left / containerRect.width) * 100}%`,
+      });
+    }
 
     setShake(true);
     setTimeout(() => setShake(false), 400);
@@ -40,7 +79,7 @@ function App() {
   };
 
   return (
-    <div className={`container ${shake ? "shake" : ""}`}>
+    <div ref={containerRef} className={`container ${shake ? "shake" : ""}`}>
       {accepted && <Confetti />}
 
       {!accepted ? (
@@ -53,21 +92,28 @@ function App() {
 
           <h1>Will you be my Valentine? 💘</h1>
 
-          <button
-            className="yes"
-            style={{ transform: `scale(${yesScale})` }}
-            onClick={handleYesClick}
-          >
-            YES 💖
-          </button>
+          <div className="buttons-wrapper">
+            <button
+              ref={yesRef}
+              className="yes"
+              style={{ transform: `scale(${yesScale})` }}
+              onClick={handleYesClick}
+            >
+              YES 💖
+            </button>
 
-          <button
-            className="no"
-            style={{ top: position.top, left: position.left }}
-            onClick={handleNoClick}
-          >
-            {noMessages[noCount % noMessages.length]}
-          </button>
+            <button
+              className="no"
+              style={
+                noAbsolute
+                  ? { position: "absolute", top: position.top, left: position.left }
+                  : {}
+              }
+              onClick={handleNoClick}
+            >
+              {noMessages[noCount % noMessages.length]}
+            </button>
+          </div>
         </>
       ) : (
         <div className="celebration">

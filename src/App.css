@@ -7,7 +7,7 @@ body {
 .container {
   height: 100vh;
   width: 100vw;
-  position: relative;
+  position: relative; /* for NO button absolute after first click */
   overflow: hidden;
   text-align: center;
   display: flex;
@@ -19,7 +19,7 @@ body {
 .valentine-img {
   width: 260px;
   max-width: 80%;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   animation: float 3s ease-in-out infinite;
 }
 
@@ -29,7 +29,15 @@ body {
   100% { transform: translateY(0); }
 }
 
-.yes {
+/* Buttons container for parallel alignment */
+.buttons-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* equal space between buttons */
+  margin-top: 20px;
+}
+
+.yes, .no {
   background: #ff4d6d;
   color: white;
   padding: 16px 40px;
@@ -37,20 +45,18 @@ body {
   font-size: 20px;
   border: none;
   cursor: pointer;
-  transition: transform 0.3s ease;
-  z-index: 2;
+  width: 160px;
+  transition: transform 0.3s ease, top 0.3s ease, left 0.3s ease;
 }
 
 .no {
-  position: absolute;
   background: #444;
-  color: white;
-  padding: 14px 30px;
-  border-radius: 30px;
-  border: none;
-  cursor: pointer;
-  transform: translate(-50%, -50%);
+  position: relative; /* initially relative for parallel alignment */
   z-index: 1;
+}
+
+.shake {
+  animation: shake 0.4s;
 }
 
 @keyframes shake {
@@ -59,10 +65,6 @@ body {
   50% { transform: translate(5px, -5px); }
   75% { transform: translate(-5px, -5px); }
   100% { transform: translate(0); }
-}
-
-.shake {
-  animation: shake 0.4s;
 }
 
 .celebration img {
