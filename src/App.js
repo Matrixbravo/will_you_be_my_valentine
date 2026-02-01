@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Confetti from "react-confetti";
 import "./App.css";
 import song from "./song.mp3";
-import valentineImg from "./valentine.png";
+import valentineImg from "./valentine.gif";
 
 const noMessages = [
   "Are you sure?",
