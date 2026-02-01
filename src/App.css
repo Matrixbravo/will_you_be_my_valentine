@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", cursive;
+  background: linear-gradient(to right, #ff9a9e, #fad0c4);
+}
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.valentine-img {
+  width: 260px;
+  max-width: 80%;
+  margin-bottom: 15px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+.yes {
+  background: #ff4d6d;
+  color: white;
+  padding: 16px 40px;
+  border-radius: 40px;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 2;
+}
+
+.no {
+  position: absolute;
+  background: #444;
+  color: white;
+  padding: 14px 30px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes shake {
+  0% { transform: translate(0); }
+  25% { transform: translate(-5px, 5px); }
+  50% { transform: translate(5px, -5px); }
+  75% { transform: translate(-5px, -5px); }
+  100% { transform: translate(0); }
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
+.celebration img {
+  width: 260px;
+  margin-top: 20px;
+}
