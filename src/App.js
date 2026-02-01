@@ -5,6 +5,7 @@ import song from "./song.mp3";
 import valentineImg from "./valentine.gif";
 
 const noMessages = [
+  "No",
   "Are you sure?",
   "Really sure?",
   "Think again 🤔",
@@ -18,7 +19,7 @@ function App() {
   const [yesScale, setYesScale] = useState(1);
   const [accepted, setAccepted] = useState(false);
   const [shake, setShake] = useState(false);
-  const [position, setPosition] = useState({ top: "60%", left: "50%" });
+  const [position, setPosition] = useState({ top: "70%", left: "50%" });
 
   const handleNoClick = () => {
     setNoCount((c) => c + 1);
